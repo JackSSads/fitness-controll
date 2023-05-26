@@ -1,5 +1,7 @@
+import { Button } from "@mui/material"
+
 export const Login = () => {
     return (
-        <div></div>
+        <Button variant="contained" fullWidth>Login</Button>
     );
-};
+}; 
