@@ -9,15 +9,46 @@ import {
     ListItemText,
     useMediaQuery,
     useTheme,
-    Button
+    Button,
+    Icon
 } from "@mui/material";
 
 import HomeIcon from '@mui/icons-material/Home';
 
 import { useAppDrawerContext, useAppThemeContext } from "../../contexts";
+import { useMatch, useNavigate, useResolvedPath } from "react-router-dom";
 
 interface IMenuLateralProps {
     children: React.ReactNode;
+};
+
+interface IListItemLinkProps {
+    to: string;
+    icon: string;
+    label: string;
+    onClick: (() => void) | undefined;
+};
+
+const ListItemLink: React.FC<IListItemLinkProps> = ({ to, icon, label, onClick }) => {
+
+    const navigate = useNavigate();
+
+    const resouvedPath = useResolvedPath(to);
+    const math = useMatch({ path: resouvedPath.pathname , end: false })
+
+    const handleClick = () => {
+        navigate(to);
+        onClick?.();
+    };
+
+    return (
+        <ListItemButton selected={!!math} onClick={handleClick}>
+            <ListItemIcon>
+                <Icon>{icon}</Icon>
+            </ListItemIcon>
+            <ListItemText primary={label} />
+        </ListItemButton>
+    );
 };
 
 export const MenuDrawer: React.FC<IMenuLateralProps> = ({ children }) => {
@@ -25,7 +56,7 @@ export const MenuDrawer: React.FC<IMenuLateralProps> = ({ children }) => {
     const theme = useTheme();
     const smDown = useMediaQuery(theme.breakpoints.down("sm"));
 
-    const { isDrawer,toggleDrawerOpen } = useAppDrawerContext();
+    const { isDrawer, toggleDrawerOpen } = useAppDrawerContext();
 
     return (
         <>
@@ -43,12 +74,7 @@ export const MenuDrawer: React.FC<IMenuLateralProps> = ({ children }) => {
 
                     <Box flex={1}>
                         <List component={"nav"}>
-                            <ListItemButton>
-                                <ListItemIcon>
-                                    <HomeIcon />
-                                </ListItemIcon>
-                                <ListItemText primary="Página inicial" />
-                            </ListItemButton>
+                            <ListItemLink icon="home" label="Página inicial" to="/" onClick={smDown ? toggleDrawerOpen : undefined}/>
                         </List>
                     </Box>
                 </Box>
