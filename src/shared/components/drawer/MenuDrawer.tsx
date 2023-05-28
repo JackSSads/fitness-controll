@@ -56,7 +56,7 @@ export const MenuDrawer: React.FC<IMenuLateralProps> = ({ children }) => {
     const theme = useTheme();
     const smDown = useMediaQuery(theme.breakpoints.down("sm"));
 
-    const { isDrawer, toggleDrawerOpen } = useAppDrawerContext();
+    const { isDrawer, toggleDrawerOpen, drawerOptions } = useAppDrawerContext();
 
     return (
         <>
@@ -74,7 +74,15 @@ export const MenuDrawer: React.FC<IMenuLateralProps> = ({ children }) => {
 
                     <Box flex={1}>
                         <List component={"nav"}>
-                            <ListItemLink icon="home" label="Página inicial" to="/" onClick={smDown ? toggleDrawerOpen : undefined}/>
+                            {drawerOptions.map(drawerOptions => (
+                                <ListItemLink
+                                    key={drawerOptions.path}
+                                    label={drawerOptions.label}
+                                    icon={drawerOptions.icon}
+                                    to={drawerOptions.path}
+                                    onClick={smDown ? toggleDrawerOpen : undefined}
+                                />
+                            ))}
                         </List>
                     </Box>
                 </Box>
