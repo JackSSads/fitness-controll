@@ -5,18 +5,20 @@ import { useAppDrawerContext } from "../contexts";
 interface ILayoutBasePagesProps {
     children: React.ReactNode;
     title: string;
+    toobar?: React.ReactNode;
 };
 
-export const LayoutBasePages: React.FC<ILayoutBasePagesProps> = ({ children, title }) => {
+export const LayoutBasePages: React.FC<ILayoutBasePagesProps> = ({ children, title, toobar }) => {
 
     const smDown = useMediaQuery((theme: Theme) => theme.breakpoints.down("sm"));
+    const mdDown = useMediaQuery((theme: Theme) => theme.breakpoints.down("md"));
     const theme = useTheme();
 
     const { toggleDrawerOpen } = useAppDrawerContext();
 
     return (
         <Box height={"100%"} display={"flex"} flexDirection={"column"} gap={1}>
-            <Box display={"flex"} alignItems={"center"} padding={1} height={theme.spacing(12)} gap={1}>
+            <Box display={"flex"} alignItems={"center"} padding={1} gap={1} height={theme.spacing(smDown ? 6 : mdDown ? 8 : 12)} >
 
                 {smDown && (
                     <IconButton onClick={toggleDrawerOpen}>
@@ -24,16 +26,18 @@ export const LayoutBasePages: React.FC<ILayoutBasePagesProps> = ({ children, tit
                     </IconButton>
                 )}
 
-                <Typography variant="h5" gutterBottom>
+                <Typography variant={smDown ? "h5" : mdDown ? "h4" : "h3"}overflow={"hidden"} textOverflow={"ellipsis"} whiteSpace={"nowrap"}>
                     {title}
                 </Typography>
             </Box>
 
-            <Box>
-                Barra de Ferramentas
-            </Box>
+            {toobar && (
+                <Box>
+                    {toobar}
+                </Box>
+            )}
 
-            <Box>
+            <Box flex={1} overflow={"auto"}>
                 {children}
             </Box>
         </Box>
