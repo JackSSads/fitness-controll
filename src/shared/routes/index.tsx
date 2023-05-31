@@ -1,6 +1,6 @@
 import { useEffect } from "react";
 import { Routes, Route, Navigate} from "react-router-dom"
-
+import HomeIcon from '@mui/icons-material/Home';
 import { useAppDrawerContext } from "../contexts";
 import { Dashboard } from "../../pages";
 
@@ -13,11 +13,11 @@ export const AppRoutes = () => {
         setDrawerOption([
             {
                 label: "Página Inicial",
-                icon: "home",
+                icon: <HomeIcon/>,
                 path: "/"
             },
         ]);
-    }, []);
+    }, [setDrawerOption]);
 
     return (
         <Routes>
