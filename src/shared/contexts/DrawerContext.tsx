@@ -8,7 +8,7 @@ interface IDrawerContextData {
 };
 
 interface IDrawerOption {
-    icon: string;
+    icon: React.ReactNode;
     label: string;
     path: string;
 };
