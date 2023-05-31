@@ -2,7 +2,7 @@ import { LayoutBasePages } from "../../shared/layouts";
 
 export const Dashboard = () => {
     return(
-        <LayoutBasePages >
+        <LayoutBasePages title="Dashboard" >
             Testando
         </LayoutBasePages>
     );
