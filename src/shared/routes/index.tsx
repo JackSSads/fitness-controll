@@ -1,8 +1,8 @@
-import { Routes, Route, Navigate} from "react-router-dom"
-import { Login } from "../../pages/login";
-import { App } from "../../App";
-import { useAppDrawerContext } from "../contexts";
 import { useEffect } from "react";
+import { Routes, Route, Navigate} from "react-router-dom"
+
+import { useAppDrawerContext } from "../contexts";
+import { Dashboard } from "../../pages";
 
 export const AppRoutes = () => {
 
@@ -14,15 +14,14 @@ export const AppRoutes = () => {
             {
                 label: "Página Inicial",
                 icon: "home",
-                path: "/login"
+                path: "/"
             },
         ]);
     }, []);
 
     return (
         <Routes>
-            <Route path="/login" element={<Login />}/>
-            <Route path="/" element={<App/>}/>
+            <Route path="/" element={<Dashboard />}/>
 
             <Route path="*" element={<Navigate to={"/login"} />}/>
         </Routes>
