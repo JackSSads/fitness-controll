@@ -9,11 +9,11 @@ import {
     ListItemText,
     useMediaQuery,
     useTheme,
-    Button,
     Icon
 } from "@mui/material";
 
-import HomeIcon from '@mui/icons-material/Home';
+import DarkModeIcon from '@mui/icons-material/DarkMode';
+import WbSunnyIcon from '@mui/icons-material/WbSunny';
 
 import { useAppDrawerContext, useAppThemeContext } from "../../contexts";
 import { useMatch, useNavigate, useResolvedPath } from "react-router-dom";
@@ -24,7 +24,7 @@ interface IMenuLateralProps {
 
 interface IListItemLinkProps {
     to: string;
-    icon: string;
+    icon: React.ReactNode;
     label: string;
     onClick: (() => void) | undefined;
 };
@@ -34,7 +34,7 @@ const ListItemLink: React.FC<IListItemLinkProps> = ({ to, icon, label, onClick }
     const navigate = useNavigate();
 
     const resouvedPath = useResolvedPath(to);
-    const math = useMatch({ path: resouvedPath.pathname , end: false })
+    const math = useMatch({ path: resouvedPath.pathname, end: false })
 
     const handleClick = () => {
         navigate(to);
@@ -85,8 +85,20 @@ export const MenuDrawer: React.FC<IMenuLateralProps> = ({ children }) => {
                             ))}
                         </List>
                     </Box>
+                    <Box>
+                        <List component={"nav"}>
+                            <ListItemButton onClick={toggleTheme}>
+                                <ListItemIcon>
+                                    <Icon>
+                                        <DarkModeIcon />
+                                        <WbSunnyIcon />
+                                    </Icon>
+                                </ListItemIcon>
+                                <ListItemText primary={"Alterar tema"} />
+                            </ListItemButton>
+                        </List>
+                    </Box>
                 </Box>
-                <Button variant="contained" color="primary" onClick={toggleTheme}>Tema</Button>
             </Drawer>
 
             <Box height={"100vh"} marginLeft={smDown ? 0 : theme.spacing(26)}>
