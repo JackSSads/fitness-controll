@@ -4,7 +4,7 @@ import AddIcon from '@mui/icons-material/Add';
 import SearchIcon from '@mui/icons-material/Search';
 
 
-interface IToobarProps {
+interface IListingToolsProps {
     textSearch?: string;
     visibleInputSearch?: boolean;
     whenChangingSearchText?: (newText: string) => void;
@@ -13,7 +13,7 @@ interface IToobarProps {
     whenClickButton?: () => void;
 };
 
-export const Toobar: React.FC<IToobarProps> = ({
+export const ListingTools: React.FC<IListingToolsProps> = ({
     textSearch = "",
     visibleInputSearch = false,
     whenChangingSearchText,
