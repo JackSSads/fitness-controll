@@ -1,4 +1,4 @@
-import { Box, Button, Icon, Paper, useTheme, Divider, Skeleton } from "@mui/material";
+import { Box, Button, Icon, Paper, useTheme, Divider, Skeleton, Typography, useMediaQuery, Theme } from "@mui/material";
 
 import AddIcon from '@mui/icons-material/Add';
 import SaveIcon from '@mui/icons-material/Save';
@@ -50,6 +50,9 @@ export const DetailTools: React.FC<IDetailToolsProps> = ({
     whenCilickingButtonSaveAndClose,
 }) => {
 
+
+    const smDown = useMediaQuery((theme: Theme) => theme.breakpoints.down("sm"));
+    const mdDown = useMediaQuery((theme: Theme) => theme.breakpoints.down("md"));
     const theme = useTheme();
 
     return (
@@ -69,33 +72,33 @@ export const DetailTools: React.FC<IDetailToolsProps> = ({
                     color="primary"
                     disableElevation
                     onClick={whenCilickingButtonSave}
-                    startIcon={
-                        <Icon>
-                            <SaveIcon />
-                        </Icon>
-                    }
-                >Salvar</Button>
+                    startIcon={ <Icon> <SaveIcon /> </Icon> }
+                >
+                    <Typography variant="button" whiteSpace={"nowrap"} textOverflow={"ellipsis"} overflow={"hidden"}>
+                        Salvar
+                    </Typography>
+                </Button>
             )}
 
             {showButtonSaveLoading && (
                 <Skeleton width={109} height={60} />
             )}
 
-            {(showButtonSaveAndClose && !showButtonSaveAndCloseLoading) && (
+            {(showButtonSaveAndClose && !showButtonSaveAndCloseLoading && !smDown && !mdDown) && (
                 <Button
                     variant="outlined"
                     color="primary"
                     disableElevation
                     onClick={whenCilickingButtonSaveAndClose}
-                    startIcon={
-                        <Icon>
-                            <SaveIcon />
-                        </Icon>
-                    }
-                >Salvar e voltar</Button>
+                    startIcon={ <Icon><SaveIcon /></Icon> }
+                >
+                    <Typography variant="button" whiteSpace={"nowrap"} textOverflow={"ellipsis"} overflow={"hidden"}>
+                        Salvar e voltar
+                    </Typography>
+                </Button>
             )}
 
-            {showButtonSaveAndCloseLoading && (
+            {(showButtonSaveAndCloseLoading  && !smDown && !mdDown) && (
                 <Skeleton width={180} height={60} />
             )}
 
@@ -105,37 +108,42 @@ export const DetailTools: React.FC<IDetailToolsProps> = ({
                     color="primary"
                     disableElevation
                     onClick={whenCilickingButtonDelete}
-                    startIcon={
-                        <Icon>
-                            <DeleteForeverIcon />
-                        </Icon>
-                    }
-                >Apagar</Button>
+                    startIcon={ <Icon><DeleteForeverIcon /></Icon> }
+                >
+                    <Typography variant="button" whiteSpace={"nowrap"} textOverflow={"ellipsis"} overflow={"hidden"}>
+                        Apagar
+                    </Typography>
+                </Button>
             )}
 
             {showButtonDeleteLoading && (
                 <Skeleton width={109} height={60} />
             )}
 
-            {(showButtonSave && !showButtonNewLoading) && (
+            {(showButtonSave && !showButtonNewLoading && !smDown) && (
                 <Button
                     variant="outlined"
                     color="primary"
                     disableElevation
                     onClick={whenCilickingButtonNew}
-                    startIcon={
-                        <Icon>
-                            <AddIcon />
-                        </Icon>
-                    }
-                >{textButtonNew}</Button>
+                    startIcon={ <Icon><AddIcon /></Icon> }
+                >
+                    <Typography variant="button" whiteSpace={"nowrap"} textOverflow={"ellipsis"} overflow={"hidden"}>
+                        {textButtonNew}
+                    </Typography>
+                </Button>
             )}
 
-            {showButtonNewLoading && (
+            {(showButtonNewLoading  && !smDown) && (
                 <Skeleton width={109} height={60} />
             )}
 
-            <Divider orientation="vertical" />
+            
+            {(showButtonBack &&
+                (showButtonNew || showButtonSaveAndClose || showButtonDelete || showButtonSave)
+            ) && (
+                <Divider orientation="vertical" />
+            )}
 
             {(showButtonBack && !showButtonBackLoading) && (
                 <Button
@@ -143,12 +151,12 @@ export const DetailTools: React.FC<IDetailToolsProps> = ({
                     color="primary"
                     disableElevation
                     onClick={whenCilickingButtonBack}
-                    startIcon={
-                        <Icon>
-                            <ArrowBackIcon />
-                        </Icon>
-                    }
-                >Voltar</Button>
+                    startIcon={ <Icon><ArrowBackIcon /></Icon> }
+                >
+                    <Typography variant="button" whiteSpace={"nowrap"} textOverflow={"ellipsis"} overflow={"hidden"}>
+                        Voltar
+                    </Typography>
+                </Button>
             )}
 
             {showButtonBackLoading && (
