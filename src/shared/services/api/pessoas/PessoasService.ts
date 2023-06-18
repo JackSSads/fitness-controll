@@ -1,14 +1,14 @@
 import { Enviroment } from "../../../environment";
 import { API } from "../axiosConfig";
 
-interface IListagemPessoa {
+export interface IListagemPessoa {
     id: number;
     email: string;
     academia: number;
     nomeCompleto: string;
 };
 
-interface IDetalhePessoas {
+export interface IDetalhePessoas {
     id: number;
     email: string;
     academia: number;
@@ -20,7 +20,7 @@ type TPessoasComTotalCount = {
     totalCount: number;
 };
 
-const getAll = async (page: 1, filter = ""): Promise<TPessoasComTotalCount | Error> => {
+const getAll = async (page = 1, filter = ""): Promise<TPessoasComTotalCount | Error> => {
     try {
         const urlRelative = `/pessoas?_page=${page}&_limit=${Enviroment.LIMITE_DE_LINHAS}&nomeCompleto_like=${filter}`;
 
