@@ -1,11 +1,12 @@
 import { useMemo, useEffect, useState } from "react";
-import { LinearProgress, Paper, Table, TableBody, TableCell, TableContainer, TableHead, TableRow } from "@mui/material";
+import { LinearProgress, Paper, Table, TableBody, TableCell, TableContainer, TableFooter, TableHead, TableRow } from "@mui/material";
 import { useSearchParams } from "react-router-dom";
 
 import { IListagemPessoa, PessoaService } from "../../shared/services/api/pessoas/PessoasService";
 import { ListingTools } from "../../shared/components";
 import { LayoutBasePages } from "../../shared/layouts";
 import { useDebounce } from "../../shared/hooks";
+import { Enviroment } from "../../shared/environment";
 
 
 export const ListagemPessoas: React.FC = () => {
@@ -19,6 +20,10 @@ export const ListagemPessoas: React.FC = () => {
 
     const busca = useMemo(() => {
         return searchParams.get("busca") || "";
+    }, [searchParams]);
+
+    const page = useMemo(() => {
+        return searchParams.get("page") || "";
     }, [searchParams]);
 
 
@@ -67,26 +72,27 @@ export const ListagemPessoas: React.FC = () => {
                         </TableRow>
 
                     </TableHead>
+                    <TableBody>
 
-                    {!isLoading ? (
-                        <TableBody>
-
-                            {rows.map(row => (
-                                <TableRow key={row.id}>
-                                    <TableCell>Ações</TableCell>
-                                    <TableCell>{row.nomeCompleto}</TableCell>
-                                    <TableCell>{row.email}</TableCell>
-                                </TableRow>
-                            ))}
-
-                        </TableBody>
-                    ) : (
-                            <TableRow>
-                                <TableCell><LinearProgress /></TableCell>
-                                <TableCell><LinearProgress /></TableCell>
-                                <TableCell><LinearProgress /></TableCell>
+                        {rows.map(row => (
+                            <TableRow key={row.id}>
+                                <TableCell>Ações</TableCell>
+                                <TableCell>{row.nomeCompleto}</TableCell>
+                                <TableCell>{row.email}</TableCell>
                             </TableRow>
+                        ))}
+
+                    </TableBody>
+
+                    {totalCount === 0 && !isLoading  && (
+                        <caption>{Enviroment.LISTAGEM_VAZIA}</caption>
                     )}
+
+                    <TableFooter>
+                        {isLoading && (
+                            <TableCell colSpan={3}><LinearProgress variant="indeterminate" /></TableCell>
+                        )}
+                    </TableFooter>
                 </Table>
             </TableContainer>
         </LayoutBasePages>
