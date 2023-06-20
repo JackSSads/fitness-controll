@@ -1,8 +1,13 @@
 import { useEffect } from "react";
-import { Routes, Route, Navigate} from "react-router-dom"
+
+import { Routes, Route, Navigate } from "react-router-dom"
+
 import HomeIcon from '@mui/icons-material/Home';
+import PeopleIcon from '@mui/icons-material/People';
+
 import { useAppDrawerContext } from "../contexts";
-import { Dashboard } from "../../pages";
+
+import { Dashboard, ListagemPessoas } from "../../pages";
 
 export const AppRoutes = () => {
 
@@ -12,18 +17,26 @@ export const AppRoutes = () => {
 
         setDrawerOption([
             {
+                icon: <HomeIcon />,
+                path: "/",
                 label: "Página Inicial",
-                icon: <HomeIcon/>,
-                path: "/"
+            },
+            {
+                icon: <PeopleIcon />,
+                path: "/pessoas",
+                label: "Pessoas",
             },
         ]);
     }, [setDrawerOption]);
 
     return (
         <Routes>
-            <Route path="/" element={<Dashboard />}/>
+            <Route path="/" element={<Dashboard />} />
 
-            <Route path="*" element={<Navigate to={"/login"} />}/>
+            <Route path="/pessoas" element={<ListagemPessoas />} />
+            {/* <Route path="/city/detalhe/:id" element={<ListagemCidades />}/> */}
+
+            <Route path="*" element={<Navigate to={"/login"} />} />
         </Routes>
-   );
+    );
 };

@@ -2,8 +2,9 @@
     "pessoas": [
         {
             "id": 1,
-            "nome": "Jackson",
-            "sobrenome": "Souza"
+            "email": "jackson@teste.com",
+            "academia": 1,
+            "nomeCompleto": "Jackson"
         }
     ]
 }

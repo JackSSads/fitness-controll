@@ -1,8 +1,8 @@
 import { Box, Button, Icon, InputAdornment, Paper, TextField, useTheme } from "@mui/material";
-
 import AddIcon from '@mui/icons-material/Add';
 import SearchIcon from '@mui/icons-material/Search';
 
+import { Enviroment } from "../../environment";
 
 interface IListingToolsProps {
     textSearch?: string;
@@ -39,7 +39,7 @@ export const ListingTools: React.FC<IListingToolsProps> = ({
             {visibleInputSearch && (
                 <TextField
                     size={"small"}
-                    placeholder={"Pesquisar..."}
+                    placeholder={Enviroment.INPUT_DE_BUSCA}
                     InputProps={{
                         startAdornment: (
                             <InputAdornment position="start">
