@@ -5,6 +5,36 @@
             "email": "jackson@teste.com",
             "academia": 1,
             "nomeCompleto": "Jackson"
+        },
+        {
+            "id": 2,
+            "email": "bianca@teste.com",
+            "academia": 1,
+            "nomeCompleto": "Bianca"
+        },
+        {
+            "id": 3,
+            "email": "daleth@teste.com",
+            "academia": 1,
+            "nomeCompleto": "Dáleth"
+        },
+        {
+            "id": 4,
+            "email": "joaoManoel@teste.com",
+            "academia": 1,
+            "nomeCompleto": "João Manoel"
+        },
+        {
+            "id": 5,
+            "email": "mariaLucia@teste.com",
+            "academia": 1,
+            "nomeCompleto": "Maria Laucia"
+        },
+        {
+            "id": 1,
+            "email": "joaoRaimuno@teste.com",
+            "academia": 1,
+            "nomeCompleto": "João Raimundo"
         }
     ]
 }
