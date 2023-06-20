@@ -51,6 +51,22 @@ export const ListagemPessoas: React.FC = () => {
         });
     }, [busca, page]);
 
+    const handleDelete = (id: number) => {
+        if (confirm("Realmente deseja apagar?")) {
+            PessoaService.deleteById(id)
+            .then(result => {
+                if (result instanceof Error) {
+                    alert(result.message);
+                } else {
+                    setRows(oldRows => [
+                            ...oldRows.filter(oldRow => oldRow.id !== id),
+                        ]);
+                    alert("Registro apagado com sucesso");
+                };
+            });
+        };
+    };
+
     return (
         <LayoutBasePages
             title="Listagem de pessoas"
@@ -79,7 +95,7 @@ export const ListagemPessoas: React.FC = () => {
                         {rows.map(row => (
                             <TableRow key={row.id}>
                                 <TableCell>
-                                    <IconButton size="small">
+                                    <IconButton size="small" onClick={() => handleDelete(row.id)}>
                                         <DeleteForeverIcon />
                                     </IconButton>
                                     <IconButton size="small">
