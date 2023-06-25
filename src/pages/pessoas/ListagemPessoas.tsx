@@ -1,6 +1,6 @@
 import { useMemo, useEffect, useState } from "react";
 import { LinearProgress, Paper, Table, TableBody, TableCell, TableContainer, TableFooter, TableHead, TableRow, Pagination, IconButton } from "@mui/material";
-import { useSearchParams } from "react-router-dom";
+import { useNavigate, useSearchParams } from "react-router-dom";
 
 import { IListagemPessoa, PessoaService } from "../../shared/services/api/pessoas/PessoasService";
 import { ListingTools } from "../../shared/components";
@@ -17,8 +17,9 @@ export const ListagemPessoas: React.FC = () => {
     const { debounce } = useDebounce();
 
     const [rows, setRows] = useState<IListagemPessoa[]>([]);
-    const [totalCount, setTotalCount] = useState(0);
     const [isLoading, setIsLoading] = useState(true);
+    const [totalCount, setTotalCount] = useState(0);
+    const navigate = useNavigate()
 
     const busca = useMemo(() => {
         return searchParams.get("busca") || "";
@@ -98,7 +99,7 @@ export const ListagemPessoas: React.FC = () => {
                                     <IconButton size="small" onClick={() => handleDelete(row.id)}>
                                         <DeleteForeverIcon />
                                     </IconButton>
-                                    <IconButton size="small">
+                                    <IconButton size="small" onClick={() => navigate(`/persons/details/${row.id}`)}>
                                         <EditIcon />
                                     </IconButton>
                                 </TableCell>
