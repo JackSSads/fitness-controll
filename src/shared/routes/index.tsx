@@ -7,7 +7,7 @@ import PeopleIcon from '@mui/icons-material/People';
 
 import { useAppDrawerContext } from "../contexts";
 
-import { Dashboard, ListagemPessoas } from "../../pages";
+import { Dashboard, ListagemPessoas, PersonsDetails } from "../../pages";
 
 export const AppRoutes = () => {
 
@@ -23,7 +23,7 @@ export const AppRoutes = () => {
             },
             {
                 icon: <PeopleIcon />,
-                path: "/pessoas",
+                path: "/persons",
                 label: "Pessoas",
             },
         ]);
@@ -33,8 +33,8 @@ export const AppRoutes = () => {
         <Routes>
             <Route path="/" element={<Dashboard />} />
 
-            <Route path="/pessoas" element={<ListagemPessoas />} />
-            {/* <Route path="/city/detalhe/:id" element={<ListagemCidades />}/> */}
+            <Route path="/persons" element={<ListagemPessoas />} />
+            <Route path="/persons/details/:id" element={<PersonsDetails />} />
 
             <Route path="*" element={<Navigate to={"/login"} />} />
         </Routes>
