@@ -1,10 +1,11 @@
 import { useEffect, useState } from "react";
-import { LinearProgress } from "@mui/material";
 import { useNavigate, useParams } from "react-router-dom";
+import { Form } from "@unform/web";
 
 import { DetailTools } from "../../shared/components";
 import { LayoutBasePages } from "../../shared/layouts";
 import { PessoaService } from "../../shared/services/api/pessoas/PessoasService";
+import { UTexField } from "../../shared/components/forms";
 
 export const PersonsDetails: React.FC = () => {
 
@@ -68,9 +69,14 @@ export const PersonsDetails: React.FC = () => {
                 />
             }
         >
-            {isLoading && (
-                <LinearProgress variant="indeterminate" />
-            )}
+
+            <Form onSubmit={(datas) => console.log(datas)}>
+
+                <UTexField name="nomeCompleto" />
+                <button type="submit">Enviar</button>
+
+            </Form>
+
         </LayoutBasePages>
     );
 };
