@@ -2,10 +2,9 @@ import { useEffect, useRef, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { FormHandles } from "@unform/core";
 import { Box, Grid, LinearProgress, Paper, Typography } from "@mui/material";
-import { Form } from "@unform/web";
 
 import { PessoaService } from "../../shared/services/api/pessoas/PessoasService";
-import { UTexField } from "../../shared/components/forms";
+import { UTexField, UForm } from "../../shared/components/forms";
 import { LayoutBasePages } from "../../shared/layouts";
 import { DetailTools } from "../../shared/components";
 
@@ -109,7 +108,7 @@ export const PersonsDetails: React.FC = () => {
             }
         >
 
-            <Form ref={formRef} onSubmit={handleSave}>
+            <UForm ref={formRef} onSubmit={handleSave}>
                 <Box m={1} display={"flex"} flexDirection={"column"} component={Paper} variant="outlined">
 
                     <Grid container direction={"column"} padding={2} spacing={2}>
@@ -165,7 +164,7 @@ export const PersonsDetails: React.FC = () => {
                     </Grid>
 
                 </Box>
-            </Form>
+            </UForm>
 
         </LayoutBasePages>
     );
