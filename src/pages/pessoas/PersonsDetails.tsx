@@ -1,16 +1,25 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
+import { FormHandles } from "@unform/core";
 import { Form } from "@unform/web";
 
-import { DetailTools } from "../../shared/components";
-import { LayoutBasePages } from "../../shared/layouts";
 import { PessoaService } from "../../shared/services/api/pessoas/PessoasService";
 import { UTexField } from "../../shared/components/forms";
+import { LayoutBasePages } from "../../shared/layouts";
+import { DetailTools } from "../../shared/components";
+
+interface IFormData {
+    email: string;
+    nomeCompleto: string;
+    academia: number;
+};
 
 export const PersonsDetails: React.FC = () => {
 
     const { id = "new" } = useParams<"id">();
     const navigate = useNavigate();
+
+    const formRef = useRef<FormHandles>(null);
 
     const [isLoading, setIsLoading] = useState(false);
     const [name, setName] = useState('');
@@ -26,14 +35,37 @@ export const PersonsDetails: React.FC = () => {
                         navigate("/persons");
                     } else {
                         setName(result.nomeCompleto);
-                        console.log(result);
+                        formRef.current?.setData(result);
                     };
                 });
         };
     }, [id]);
 
-    const handleSave = () => {
-        return;
+    const handleSave = (data: IFormData) => {
+
+        setIsLoading(true);
+
+        if (id === "new") {
+            PessoaService
+            .create(data)
+            .then((result) => {
+                setIsLoading(false);
+                if (result instanceof Error) {
+                    alert(result.message);
+                } else {
+                    navigate(`/persons/details/${result}`);
+                };             
+            });
+        } else {
+            PessoaService
+            .updateById(Number(id), {id: Number(id), ...data})
+            .then((result) => {
+                setIsLoading(false);
+                if (result instanceof Error) {
+                    alert(result.message);
+                };             
+            });
+        };
     };
 
     const handleDelete = (id: number) => {
@@ -58,11 +90,11 @@ export const PersonsDetails: React.FC = () => {
                 <DetailTools
                     textButtonNew="Nova"
                     showButtonSaveAndClose
-                    showButtonNew={id !== "new"}
+                    showButtonSave={id !== "new"}
                     showButtonDelete={id !== "new"}
 
-                    whenCilickingButtonSave={() => handleSave}
-                    whenCilickingButtonSaveAndClose={() => { }}
+                    whenCilickingButtonSave={ () => formRef.current?.submitForm()}
+                    whenCilickingButtonSaveAndClose={() => formRef.current?.submitForm()}
                     whenCilickingButtonBack={() => navigate("/persons")}
                     whenCilickingButtonDelete={() => handleDelete(Number(id))}
                     whenCilickingButtonNew={() => navigate("/persons/details/new")}
@@ -70,11 +102,10 @@ export const PersonsDetails: React.FC = () => {
             }
         >
 
-            <Form onSubmit={(datas) => console.log(datas)}>
-
-                <UTexField name="nomeCompleto" />
-                <button type="submit">Enviar</button>
-
+            <Form ref={formRef} onSubmit={handleSave}>
+                <UTexField placeholder="Nome completo" name="nomeCompleto" />
+                <UTexField placeholder="E-mail" name="email" />
+                <UTexField placeholder="Academia" name="academia" />
             </Form>
 
         </LayoutBasePages>
