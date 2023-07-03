@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { FormHandles } from "@unform/core";
+import { Box, Grid, LinearProgress, Paper, Typography } from "@mui/material";
 import { Form } from "@unform/web";
 
 import { PessoaService } from "../../shared/services/api/pessoas/PessoasService";
@@ -38,6 +39,12 @@ export const PersonsDetails: React.FC = () => {
                         formRef.current?.setData(result);
                     };
                 });
+        } else {
+            formRef.current?.setData({
+                nomeCompleto: "",
+                email: "",
+                academia: ""
+            });
         };
     }, [id]);
 
@@ -47,24 +54,24 @@ export const PersonsDetails: React.FC = () => {
 
         if (id === "new") {
             PessoaService
-            .create(data)
-            .then((result) => {
-                setIsLoading(false);
-                if (result instanceof Error) {
-                    alert(result.message);
-                } else {
-                    navigate(`/persons/details/${result}`);
-                };             
-            });
+                .create(data)
+                .then((result) => {
+                    setIsLoading(false);
+                    if (result instanceof Error) {
+                        alert(result.message);
+                    } else {
+                        navigate(`/persons/details/${result}`);
+                    };
+                });
         } else {
             PessoaService
-            .updateById(Number(id), {id: Number(id), ...data})
-            .then((result) => {
-                setIsLoading(false);
-                if (result instanceof Error) {
-                    alert(result.message);
-                };             
-            });
+                .updateById(Number(id), { id: Number(id), ...data })
+                .then((result) => {
+                    setIsLoading(false);
+                    if (result instanceof Error) {
+                        alert(result.message);
+                    };
+                });
         };
     };
 
@@ -93,7 +100,7 @@ export const PersonsDetails: React.FC = () => {
                     showButtonSave={id !== "new"}
                     showButtonDelete={id !== "new"}
 
-                    whenCilickingButtonSave={ () => formRef.current?.submitForm()}
+                    whenCilickingButtonSave={() => formRef.current?.submitForm()}
                     whenCilickingButtonSaveAndClose={() => formRef.current?.submitForm()}
                     whenCilickingButtonBack={() => navigate("/persons")}
                     whenCilickingButtonDelete={() => handleDelete(Number(id))}
@@ -103,9 +110,61 @@ export const PersonsDetails: React.FC = () => {
         >
 
             <Form ref={formRef} onSubmit={handleSave}>
-                <UTexField placeholder="Nome completo" name="nomeCompleto" />
-                <UTexField placeholder="E-mail" name="email" />
-                <UTexField placeholder="Academia" name="academia" />
+                <Box m={1} display={"flex"} flexDirection={"column"} component={Paper} variant="outlined">
+
+                    <Grid container direction={"column"} padding={2} spacing={2}>
+
+                        <Grid item>
+                            {isLoading && (
+                                <LinearProgress variant="indeterminate" />
+                            )}
+                        </Grid>
+
+                        <Grid item>
+                            <Typography variant="h6">Geral</Typography>
+                        </Grid>
+
+                        <Grid container item direction={"row"} spacing={2}>
+
+                            <Grid item xs={12} md={6} lg={4} xl={2}>
+
+                                <UTexField
+                                    fullWidth
+                                    disabled={isLoading}
+                                    label="Nome competo"
+                                    name="nomeCompleto"
+                                    onChange={e => setName(e.target.value)} />
+
+                            </Grid>
+                        </Grid>
+
+                        <Grid container item direction={"row"} spacing={2}>
+                            <Grid item xs={12} md={6} lg={4} xl={2}>
+
+                                <UTexField
+                                    fullWidth
+                                    disabled={isLoading}
+                                    label="E-mail"
+                                    name="email" />
+
+                            </Grid>
+                        </Grid>
+
+                        <Grid container item direction={"row"} spacing={2}>
+                            <Grid item xs={12} md={6} lg={4} xl={2}>
+
+                                <UTexField
+                                    fullWidth
+                                    disabled={isLoading}
+                                    label="Academia"
+                                    name="academia" />
+
+                            </Grid>
+                        </Grid>
+
+                    </Grid>
+
+                </Box>
             </Form>
 
         </LayoutBasePages>
