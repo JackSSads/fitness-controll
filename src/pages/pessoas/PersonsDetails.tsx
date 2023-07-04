@@ -1,10 +1,9 @@
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
-import { FormHandles } from "@unform/core";
 import { Box, Grid, LinearProgress, Paper, Typography } from "@mui/material";
 
 import { PessoaService } from "../../shared/services/api/pessoas/PessoasService";
-import { UTexField, UForm } from "../../shared/components/forms";
+import { UTexField, UForm, useUForm } from "../../shared/components/forms";
 import { LayoutBasePages } from "../../shared/layouts";
 import { DetailTools } from "../../shared/components";
 
@@ -18,18 +17,21 @@ export const PersonsDetails: React.FC = () => {
 
     const { id = "new" } = useParams<"id">();
     const navigate = useNavigate();
-
-    const formRef = useRef<FormHandles>(null);
+    const { formRef, save, saveAndClose, isSaveAndClose } = useUForm();
 
     const [isLoading, setIsLoading] = useState(false);
     const [name, setName] = useState('');
 
     useEffect(() => {
         if (id !== "new") {
+
             setIsLoading(true);
+
             PessoaService.getById(Number(id))
                 .then((result) => {
+
                     setIsLoading(false);
+
                     if (result instanceof Error) {
                         alert(result.message);
                         navigate("/persons");
@@ -39,6 +41,7 @@ export const PersonsDetails: React.FC = () => {
                     };
                 });
         } else {
+
             formRef.current?.setData({
                 nomeCompleto: "",
                 email: "",
@@ -55,20 +58,35 @@ export const PersonsDetails: React.FC = () => {
             PessoaService
                 .create(data)
                 .then((result) => {
+
                     setIsLoading(false);
+
                     if (result instanceof Error) {
                         alert(result.message);
                     } else {
-                        navigate(`/persons/details/${result}`);
+
+                        if (isSaveAndClose()) {
+                            navigate("/persons");
+                        } else {
+                            navigate(`/persons/details/${result}`);
+                        };
                     };
                 });
         } else {
+
             PessoaService
                 .updateById(Number(id), { id: Number(id), ...data })
                 .then((result) => {
+
                     setIsLoading(false);
+
                     if (result instanceof Error) {
                         alert(result.message);
+                    } else {
+
+                        if (isSaveAndClose()) {
+                            navigate("/persons");
+                        };
                     };
                 });
         };
@@ -99,11 +117,11 @@ export const PersonsDetails: React.FC = () => {
                     showButtonSave={id !== "new"}
                     showButtonDelete={id !== "new"}
 
-                    whenCilickingButtonSave={() => formRef.current?.submitForm()}
-                    whenCilickingButtonSaveAndClose={() => formRef.current?.submitForm()}
                     whenCilickingButtonBack={() => navigate("/persons")}
                     whenCilickingButtonDelete={() => handleDelete(Number(id))}
+                    whenCilickingButtonSave={save}
                     whenCilickingButtonNew={() => navigate("/persons/details/new")}
+                    whenCilickingButtonSaveAndClose={saveAndClose}
                 />
             }
         >
