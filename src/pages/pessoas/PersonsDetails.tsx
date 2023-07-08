@@ -3,15 +3,22 @@ import { useNavigate, useParams } from "react-router-dom";
 import { Box, Grid, LinearProgress, Paper, Typography } from "@mui/material";
 
 import { PessoaService } from "../../shared/services/api/pessoas/PessoasService";
-import { UTexField, UForm, useUForm } from "../../shared/components/forms";
+import { UTexField, UForm, useUForm, IUFormErrors } from "../../shared/components/forms";
 import { LayoutBasePages } from "../../shared/layouts";
 import { DetailTools } from "../../shared/components";
+import * as yup from "yup";
 
 interface IFormData {
     email: string;
-    nomeCompleto: string;
     academia: number;
+    nomeCompleto: string;
 };
+
+const formValidationSchema: yup.Schema<IFormData> = yup.object().shape({
+    academia: yup.number().required(),
+    email: yup.string().required().email(),
+    nomeCompleto: yup.string().required().min(3),
+});
 
 export const PersonsDetails: React.FC = () => {
 
@@ -52,44 +59,61 @@ export const PersonsDetails: React.FC = () => {
 
     const handleSave = (data: IFormData) => {
 
-        setIsLoading(true);
+        formValidationSchema
+            .validate(data, { abortEarly: false })
+            .then((dadasValidated) => {
 
-        if (id === "new") {
-            PessoaService
-                .create(data)
-                .then((result) => {
+                setIsLoading(true);
 
-                    setIsLoading(false);
+                if (id === "new") {
+                    PessoaService
+                        .create(dadasValidated)
+                        .then((result) => {
 
-                    if (result instanceof Error) {
-                        alert(result.message);
-                    } else {
+                            setIsLoading(false);
 
-                        if (isSaveAndClose()) {
-                            navigate("/persons");
-                        } else {
-                            navigate(`/persons/details/${result}`);
-                        };
-                    };
+                            if (result instanceof Error) {
+                                alert(result.message);
+                            } else {
+
+                                if (isSaveAndClose()) {
+                                    navigate("/persons");
+                                } else {
+                                    navigate(`/persons/details/${result}`);
+                                };
+                            };
+                        });
+                } else {
+
+                    PessoaService
+                        .updateById(Number(id), { id: Number(id), ...dadasValidated })
+                        .then((result) => {
+
+                            setIsLoading(false);
+
+                            if (result instanceof Error) {
+                                alert(result.message);
+                            } else {
+
+                                if (isSaveAndClose()) {
+                                    navigate("/persons");
+                                };
+                            };
+                        });
+                };
+            })
+            .catch((errors: yup.ValidationError) => {
+                const validationErrors: IUFormErrors = {};
+
+                errors.inner.forEach(error => {
+                    if (!error.path) return;
+
+                    validationErrors[error.path] = error.message;
+                    formRef.current?.setErrors(validationErrors);
                 });
-        } else {
 
-            PessoaService
-                .updateById(Number(id), { id: Number(id), ...data })
-                .then((result) => {
-
-                    setIsLoading(false);
-
-                    if (result instanceof Error) {
-                        alert(result.message);
-                    } else {
-
-                        if (isSaveAndClose()) {
-                            navigate("/persons");
-                        };
-                    };
-                });
-        };
+                console.log(validationErrors);
+            });
     };
 
     const handleDelete = (id: number) => {
@@ -105,7 +129,6 @@ export const PersonsDetails: React.FC = () => {
                 });
         };
     };
-
 
     return (
         <LayoutBasePages
