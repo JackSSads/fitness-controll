@@ -1,6 +1,6 @@
 import { useMemo, useEffect, useState } from "react";
 import { LinearProgress, Paper, Table, TableBody, TableCell, TableContainer, TableFooter, TableHead, TableRow, Pagination, IconButton } from "@mui/material";
-import { useSearchParams } from "react-router-dom";
+import { useNavigate, useSearchParams } from "react-router-dom";
 
 import { IListagemPessoa, PessoaService } from "../../shared/services/api/pessoas/PessoasService";
 import { ListingTools } from "../../shared/components";
@@ -17,8 +17,9 @@ export const ListagemPessoas: React.FC = () => {
     const { debounce } = useDebounce();
 
     const [rows, setRows] = useState<IListagemPessoa[]>([]);
-    const [totalCount, setTotalCount] = useState(0);
     const [isLoading, setIsLoading] = useState(true);
+    const [totalCount, setTotalCount] = useState(0);
+    const navigate = useNavigate()
 
     const busca = useMemo(() => {
         return searchParams.get("busca") || "";
@@ -54,16 +55,16 @@ export const ListagemPessoas: React.FC = () => {
     const handleDelete = (id: number) => {
         if (window.confirm("Realmente deseja excluir esse resgistro?")) {
             PessoaService.deleteById(id)
-            .then(result => {
-                if (result instanceof Error) {
-                    alert(result.message);
-                } else {
-                    setRows(oldRows => [
+                .then(result => {
+                    if (result instanceof Error) {
+                        alert(result.message);
+                    } else {
+                        setRows(oldRows => [
                             ...oldRows.filter(oldRow => oldRow.id !== id),
                         ]);
-                    alert("Registro apagado com sucesso");
-                };
-            });
+                        alert("Registro apagado com sucesso");
+                    };
+                });
         };
     };
 
@@ -72,9 +73,10 @@ export const ListagemPessoas: React.FC = () => {
             title="Listagem de pessoas"
             toobar={
                 <ListingTools
+                    textSearch={busca}
                     visibleInputSearch
                     textButtonNew="Nova"
-                    textSearch={busca}
+                    whenClickButton={() => navigate(`/persons/details/new`)}
                     whenChangingSearchText={text => setSearchParams({ busca: text, page: "1" }, { replace: true })}
                 />
             }>
@@ -98,7 +100,7 @@ export const ListagemPessoas: React.FC = () => {
                                     <IconButton size="small" onClick={() => handleDelete(row.id)}>
                                         <DeleteForeverIcon />
                                     </IconButton>
-                                    <IconButton size="small">
+                                    <IconButton size="small" onClick={() => navigate(`/persons/details/${row.id}`)}>
                                         <EditIcon />
                                     </IconButton>
                                 </TableCell>

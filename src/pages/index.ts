@@ -1,2 +1,3 @@
-export * from "./dashbord/Dashboard";
 export * from "./pessoas/ListagemPessoas";
+export * from "./pessoas/PersonsDetails";
+export * from "./dashbord/Dashboard";

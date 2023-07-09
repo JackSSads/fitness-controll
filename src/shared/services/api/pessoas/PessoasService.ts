@@ -29,7 +29,7 @@ const getAll = async (page = 1, filter = ""): Promise<TPessoasComTotalCount | Er
         if (data) {
             return {
                 data,
-                totalCount: Number(headers['x-total-count'] || Enviroment.LIMITE_DE_LINHAS),
+                totalCount: Number(headers['x-total-count'] || Enviroment.LIMITE_DE_LINHAS), // envia o Hrader com totalCount na minha api
             };
         };
         return new Error("Erro ao listar os registros.");
@@ -84,7 +84,7 @@ const updateById = async (id: number, dados: IDetalhePessoas): Promise<void | Er
 
 const deleteById = async (id: number): Promise<void | Error> => {
     try {
-        await API.delete("/pessoas/");
+        await API.delete(`/pessoas/${id}`);
     } catch (error) {
         console.error(error);
         return new Error((error as { message: string }).message || "Erro ao deletar o registro.");
