@@ -2,12 +2,13 @@ import { useEffect } from "react";
 
 import { Routes, Route, Navigate } from "react-router-dom"
 
-import HomeIcon from '@mui/icons-material/Home';
+import FitnessCenterIcon from '@mui/icons-material/FitnessCenter';
 import PeopleIcon from '@mui/icons-material/People';
+import HomeIcon from '@mui/icons-material/Home';
 
 import { useAppDrawerContext } from "../contexts";
 
-import { Dashboard, ListagemPessoas, PersonsDetails } from "../../pages";
+import { Dashboard, ListagemPessoas, PersonsDetails, ListagemAcademia, AcademyDetails } from "../../pages";
 
 export const AppRoutes = () => {
 
@@ -20,6 +21,11 @@ export const AppRoutes = () => {
                 icon: <HomeIcon />,
                 path: "/",
                 label: "Página Inicial",
+            },
+            {
+                icon: <FitnessCenterIcon />,
+                path: "/academy",
+                label: "Academias",
             },
             {
                 icon: <PeopleIcon />,
@@ -35,6 +41,9 @@ export const AppRoutes = () => {
 
             <Route path="/persons" element={<ListagemPessoas />} />
             <Route path="/persons/details/:id" element={<PersonsDetails />} />
+            
+            <Route path="/academy" element={<ListagemAcademia />} />
+            <Route path="/academy/details/:id" element={<AcademyDetails />} />
 
             <Route path="*" element={<Navigate to={"/login"} />} />
         </Routes>
