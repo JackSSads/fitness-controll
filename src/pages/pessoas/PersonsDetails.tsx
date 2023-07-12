@@ -2,8 +2,9 @@ import { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { Box, Grid, LinearProgress, Paper, Typography } from "@mui/material";
 
-import { PessoaService } from "../../shared/services/api/pessoas/PessoasService";
 import { UTexField, UForm, useUForm, IUFormErrors } from "../../shared/components/forms";
+import { PessoaService } from "../../shared/services/api/pessoas/PessoasService";
+import { AutoCompleteAcademy } from "./components/AutoCompleteAcademy";
 import { LayoutBasePages } from "../../shared/layouts";
 import { DetailTools } from "../../shared/components";
 import * as yup from "yup";
@@ -50,9 +51,10 @@ export const PersonsDetails: React.FC = () => {
         } else {
 
             formRef.current?.setData({
-                nomeCompleto: "",
                 email: "",
-                academia: ""
+                nomeCompleto: "",
+                academia: undefined
+
             });
         };
     }, [id]);
@@ -61,13 +63,13 @@ export const PersonsDetails: React.FC = () => {
 
         formValidationSchema
             .validate(data, { abortEarly: false })
-            .then((dadasValidated) => {
+            .then((datasValidated) => {
 
                 setIsLoading(true);
 
                 if (id === "new") {
                     PessoaService
-                        .create(dadasValidated)
+                        .create(datasValidated)
                         .then((result) => {
 
                             setIsLoading(false);
@@ -86,7 +88,7 @@ export const PersonsDetails: React.FC = () => {
                 } else {
 
                     PessoaService
-                        .updateById(Number(id), { id: Number(id), ...dadasValidated })
+                        .updateById(Number(id), { id: Number(id), ...datasValidated })
                         .then((result) => {
 
                             setIsLoading(false);
@@ -193,11 +195,7 @@ export const PersonsDetails: React.FC = () => {
                         <Grid container item direction={"row"} spacing={2}>
                             <Grid item xs={12} md={6} lg={4} xl={2}>
 
-                                <UTexField
-                                    fullWidth
-                                    disabled={isLoading}
-                                    label="Academia"
-                                    name="academia" />
+                                <AutoCompleteAcademy isExternalLoading={isLoading} />
 
                             </Grid>
                         </Grid>
