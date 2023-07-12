@@ -2,21 +2,21 @@ import { useMemo, useEffect, useState } from "react";
 import { LinearProgress, Paper, Table, TableBody, TableCell, TableContainer, TableFooter, TableHead, TableRow, Pagination, IconButton } from "@mui/material";
 import { useNavigate, useSearchParams } from "react-router-dom";
 
-import { IListagemPessoa, PessoaService } from "../../shared/services/api/pessoas/PessoasService";
 import { ListingTools } from "../../shared/components";
 import { LayoutBasePages } from "../../shared/layouts";
-import { Enviroment } from "../../shared/environment";
 import { useDebounce } from "../../shared/hooks";
+import { Enviroment } from "../../shared/environment";
 
+import { IListagemAcademias, AcademiasService } from "../../shared/services/api/academia/AcademiasService";
 import DeleteForeverIcon from '@mui/icons-material/DeleteForever';
 import EditIcon from '@mui/icons-material/Edit';
 
-export const ListagemPessoas: React.FC = () => {
+export const ListagemAcademia: React.FC = () => {
 
     const [searchParams, setSearchParams] = useSearchParams();
     const { debounce } = useDebounce();
 
-    const [rows, setRows] = useState<IListagemPessoa[]>([]);
+    const [rows, setRows] = useState<IListagemAcademias[]>([]);
     const [isLoading, setIsLoading] = useState(true);
     const [totalCount, setTotalCount] = useState(0);
     const navigate = useNavigate()
@@ -35,7 +35,7 @@ export const ListagemPessoas: React.FC = () => {
         setIsLoading(true);
 
         debounce(() => {
-            PessoaService.getAll(page, busca)
+            AcademiasService.getAll(page, busca)
                 .then((result) => {
                     setIsLoading(false);
 
@@ -54,7 +54,7 @@ export const ListagemPessoas: React.FC = () => {
 
     const handleDelete = (id: number) => {
         if (window.confirm("Realmente deseja excluir esse resgistro?")) {
-            PessoaService.deleteById(id)
+            AcademiasService.deleteById(id)
                 .then(result => {
                     if (result instanceof Error) {
                         alert(result.message);
@@ -70,13 +70,13 @@ export const ListagemPessoas: React.FC = () => {
 
     return (
         <LayoutBasePages
-            title="Listagem de pessoas"
+            title="Listagem de academias"
             toobar={
                 <ListingTools
                     textSearch={busca}
                     visibleInputSearch
                     textButtonNew="Nova"
-                    whenClickButton={() => navigate(`/persons/details/new`)}
+                    whenClickButton={() => navigate(`/academy/details/new`)}
                     whenChangingSearchText={text => setSearchParams({ busca: text, page: "1" }, { replace: true })}
                 />
             }>
@@ -87,9 +87,8 @@ export const ListagemPessoas: React.FC = () => {
 
                         <TableRow>
                             <TableCell>Ações</TableCell>
-                            <TableCell>Nome completo</TableCell>
+                            <TableCell>Nome das academias</TableCell>
                             <TableCell>E-Mail</TableCell>
-                            <TableCell>Academia</TableCell>
                         </TableRow>
 
                     </TableHead>
@@ -101,13 +100,12 @@ export const ListagemPessoas: React.FC = () => {
                                     <IconButton size="small" onClick={() => handleDelete(row.id)}>
                                         <DeleteForeverIcon />
                                     </IconButton>
-                                    <IconButton size="small" onClick={() => navigate(`/persons/details/${row.id}`)}>
+                                    <IconButton size="small" onClick={() => navigate(`/academy/details/${row.id}`)}>
                                         <EditIcon />
                                     </IconButton>
                                 </TableCell>
-                                <TableCell>{row.nomeCompleto}</TableCell>
+                                <TableCell>{row.nomeAcademia}</TableCell>
                                 <TableCell>{row.email}</TableCell>
-                                <TableCell>{row.academia}</TableCell>
                             </TableRow>
                         ))}
 

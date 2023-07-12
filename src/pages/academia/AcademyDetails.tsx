@@ -3,25 +3,22 @@ import { useNavigate, useParams } from "react-router-dom";
 import { Box, Grid, LinearProgress, Paper, Typography } from "@mui/material";
 
 import { UTexField, UForm, useUForm, IUFormErrors } from "../../shared/components/forms";
-import { PessoaService } from "../../shared/services/api/pessoas/PessoasService";
-import { AutoCompleteAcademy } from "./components/AutoCompleteAcademy";
+import { AcademiasService } from "../../shared/services/api/academia/AcademiasService";
 import { LayoutBasePages } from "../../shared/layouts";
 import { DetailTools } from "../../shared/components";
 import * as yup from "yup";
 
 interface IFormData {
     email: string;
-    academia: number;
-    nomeCompleto: string;
+    nomeAcademia: string;
 };
 
 const formValidationSchema: yup.Schema<IFormData> = yup.object().shape({
-    academia: yup.number().required(),
     email: yup.string().required().email(),
-    nomeCompleto: yup.string().required().min(3),
+    nomeAcademia: yup.string().required().min(3),
 });
 
-export const PersonsDetails: React.FC = () => {
+export const AcademyDetails: React.FC = () => {
 
     const { id = "new" } = useParams<"id">();
     const navigate = useNavigate();
@@ -35,16 +32,16 @@ export const PersonsDetails: React.FC = () => {
 
             setIsLoading(true);
 
-            PessoaService.getById(Number(id))
+            AcademiasService.getById(Number(id))
                 .then((result) => {
 
                     setIsLoading(false);
 
                     if (result instanceof Error) {
                         alert(result.message);
-                        navigate("/persons");
+                        navigate("/academy");
                     } else {
-                        setName(result.nomeCompleto);
+                        setName(result.nomeAcademia);
                         formRef.current?.setData(result);
                     };
                 });
@@ -52,9 +49,7 @@ export const PersonsDetails: React.FC = () => {
 
             formRef.current?.setData({
                 email: "",
-                nomeCompleto: "",
-                academia: undefined
-
+                nomeAcademia: "",
             });
         };
     }, [id]);
@@ -63,13 +58,13 @@ export const PersonsDetails: React.FC = () => {
 
         formValidationSchema
             .validate(data, { abortEarly: false })
-            .then((datasValidated) => {
+            .then((dadasValidated) => {
 
                 setIsLoading(true);
 
                 if (id === "new") {
-                    PessoaService
-                        .create(datasValidated)
+                    AcademiasService
+                        .create(dadasValidated)
                         .then((result) => {
 
                             setIsLoading(false);
@@ -79,16 +74,16 @@ export const PersonsDetails: React.FC = () => {
                             } else {
 
                                 if (isSaveAndClose()) {
-                                    navigate("/persons");
+                                    navigate("/academy");
                                 } else {
-                                    navigate(`/persons/details/${result}`);
+                                    navigate(`/academy/details/${result}`);
                                 };
                             };
                         });
                 } else {
 
-                    PessoaService
-                        .updateById(Number(id), { id: Number(id), ...datasValidated })
+                    AcademiasService
+                        .updateById(Number(id), { id: Number(id), ...dadasValidated })
                         .then((result) => {
 
                             setIsLoading(false);
@@ -98,7 +93,7 @@ export const PersonsDetails: React.FC = () => {
                             } else {
 
                                 if (isSaveAndClose()) {
-                                    navigate("/persons");
+                                    navigate("/academy");
                                 };
                             };
                         });
@@ -119,14 +114,15 @@ export const PersonsDetails: React.FC = () => {
     };
 
     const handleDelete = (id: number) => {
+
         if (window.confirm("Realmente deseja excluir esse resgistro?")) {
-            PessoaService.deleteById(id)
+            AcademiasService.deleteById(id)
                 .then(result => {
                     if (result instanceof Error) {
                         alert(result.message);
                     } else {
                         alert("Registro apagado com sucesso");
-                        navigate('/persons');
+                        navigate('/academy');
                     };
                 });
         };
@@ -134,7 +130,7 @@ export const PersonsDetails: React.FC = () => {
 
     return (
         <LayoutBasePages
-            title={id === "new" ? "Nova Pessoa" : name}
+            title={id === "new" ? "Nova Academia" : name}
             toobar={
                 <DetailTools
                     textButtonNew="Nova"
@@ -142,10 +138,10 @@ export const PersonsDetails: React.FC = () => {
                     showButtonSave={id !== "new"}
                     showButtonDelete={id !== "new"}
 
-                    whenCilickingButtonBack={() => navigate("/persons")}
+                    whenCilickingButtonBack={() => navigate("/academy")}
                     whenCilickingButtonDelete={() => handleDelete(Number(id))}
                     whenCilickingButtonSave={save}
-                    whenCilickingButtonNew={() => navigate("/persons/details/new")}
+                    whenCilickingButtonNew={() => navigate("/academy/details/new")}
                     whenCilickingButtonSaveAndClose={saveAndClose}
                 />
             }
@@ -156,11 +152,11 @@ export const PersonsDetails: React.FC = () => {
 
                     <Grid container direction={"column"} padding={2} spacing={2}>
 
-                        <Grid item>
-                            {isLoading && (
+                        {isLoading && (
+                            <Grid item>
                                 <LinearProgress variant="indeterminate" />
-                            )}
-                        </Grid>
+                            </Grid>
+                        )}
 
                         <Grid item>
                             <Typography variant="h6">Geral</Typography>
@@ -173,8 +169,8 @@ export const PersonsDetails: React.FC = () => {
                                 <UTexField
                                     fullWidth
                                     disabled={isLoading}
-                                    label="Nome competo"
-                                    name="nomeCompleto"
+                                    label="Nome da academia"
+                                    name="nomeAcademia"
                                     onChange={e => setName(e.target.value)} />
 
                             </Grid>
@@ -191,17 +187,7 @@ export const PersonsDetails: React.FC = () => {
 
                             </Grid>
                         </Grid>
-
-                        <Grid container item direction={"row"} spacing={2}>
-                            <Grid item xs={12} md={6} lg={4} xl={2}>
-
-                                <AutoCompleteAcademy isExternalLoading={isLoading} />
-
-                            </Grid>
-                        </Grid>
-
                     </Grid>
-
                 </Box>
             </UForm>
 

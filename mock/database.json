@@ -2,9 +2,9 @@
   "pessoas": [
     {
       "id": 1,
+      "nomeCompleto": "Jackson",
       "email": "jackson@teste.com",
-      "academia": 1,
-      "nomeCompleto": "Jackson"
+      "academia": 1
     },
     {
       "id": 3,
@@ -22,7 +22,7 @@
       "id": 5,
       "nomeCompleto": "Maria Lucia",
       "email": "marialucia@teste.com",
-      "academia": 1
+      "academia": 3
     },
     {
       "id": 6,
@@ -32,9 +32,9 @@
     },
     {
       "id": 7,
+      "nomeCompleto": "Havilla",
       "email": "havilla@teste.com",
-      "academia": 1,
-      "nomeCompleto": "Havilla"
+      "academia": 3
     },
     {
       "id": 8,
@@ -62,9 +62,47 @@
     },
     {
       "id": 13,
+      "nomeCompleto": "Socorro",
       "email": "socorro@teste.com",
-      "academia": 1,
-      "nomeCompleto": "Socorro"
+      "academia": 2
+    },
+    {
+      "id": 14,
+      "nomeCompleto": "Geronimo",
+      "email": "geronimo@gmail.com",
+      "academia": 3
+    }
+  ],
+  "academias": [
+    {
+      "id": 1,
+      "nomeAcademia": "VidAtiva",
+      "email": "vidativa@teste.com"
+    },
+    {
+      "id": 2,
+      "nomeAcademia": "Fitness",
+      "email": "fitness@teste.com"
+    },
+    {
+      "nomeAcademia": "SmartFit",
+      "email": "SmartFit@teste.com",
+      "id": 3
+    },
+    {
+      "id": 4,
+      "nomeAcademia": "Maromba",
+      "email": "teste@teste.com"
+    },
+    {
+      "id": 5,
+      "nomeAcademia": "teste",
+      "email": "teste@teste.com"
+    },
+    {
+      "nomeAcademia": "João dos Veneno",
+      "email": "jdv@teste.com",
+      "id": 6
     }
   ]
 }
